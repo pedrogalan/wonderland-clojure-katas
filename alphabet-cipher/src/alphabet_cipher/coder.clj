@@ -6,9 +6,16 @@
         m           (char-to-int y)]
     (char (+ (int \a) (rem (+ n m) 26)))))
 
+(defn extend-keyword [keyword message]
+  (loop [keyword keyword
+         n (count message)
+         result keyword]
+    (if (>= (count result) n)
+      result
+      (recur keyword n (str result keyword)))))
+
 (defn encode [keyword message]
-  (let [k (apply str (repeat 10 keyword))]
-    (apply str (map letter-from-matrix k message))))
+  (apply str (map letter-from-matrix (extend-keyword keyword message) message)))
 
 (defn decode [keyword message]
   "decodeme")
