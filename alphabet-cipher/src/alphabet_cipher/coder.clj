@@ -1,10 +1,22 @@
 (ns alphabet-cipher.coder)
 
-(defn letter-from-matrix [x y]
-  (let [char-to-int #(- (int %) (int \a))
-        n           (char-to-int x)
-        m           (char-to-int y)]
-    (char (+ (int \a) (rem (+ n m) 26)))))
+(defn create-row [first-char]
+  (let [base (map char (range 97 123))
+        pos (- (int first-char) 97)]
+    (apply concat (reverse (split-at pos base)))))
+
+(defn create-matrix []
+  (map create-row (map char (range 97 123))))
+
+(def matrix (create-matrix))
+
+(defn char-to-int [c]
+  (- (int c) (int \a)))
+
+(defn char-from-matrix [x y]
+  (let [row-number (char-to-int x)
+        col-number (char-to-int y)]
+    (nth (nth matrix row-number) col-number)))
 
 (defn extend-keyword [keyword message]
   (loop [keyword keyword
@@ -15,7 +27,7 @@
       (recur keyword n (str result keyword)))))
 
 (defn encode [keyword message]
-  (apply str (map letter-from-matrix (extend-keyword keyword message) message)))
+  (apply str (map char-from-matrix (extend-keyword keyword message) message)))
 
 (defn decode [keyword message]
   "decodeme")
