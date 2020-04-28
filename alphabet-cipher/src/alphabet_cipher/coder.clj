@@ -18,6 +18,10 @@
         col-number (char-to-int y)]
     (nth (nth matrix row-number) col-number)))
 
+(defn column-header-from-matrix [x c]
+  (let [row (nth matrix (char-to-int x))]
+    (char (+ (int \a) (.indexOf row c)))))
+
 (defn extend-keyword [keyword message]
   (loop [keyword keyword
          n (count message)
@@ -30,7 +34,7 @@
   (apply str (map char-from-matrix (extend-keyword keyword message) message)))
 
 (defn decode [keyword message]
-  "decodeme")
+  (apply str (map column-header-from-matrix (extend-keyword keyword message) message)))
 
 (defn decipher [cipher message]
   "decypherme")
